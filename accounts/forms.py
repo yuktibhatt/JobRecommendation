@@ -10,6 +10,14 @@ class JobseekerForm(UserCreationForm):
     image = forms.ImageField(required=True)
     address = forms.CharField(required=True)
     phone = forms.CharField(required=True)
+    # category1 = models.CharField(required=True)
+    # category2 = models.CharField(required=True)
+    # category3 = models.CharField(required=True)
+    # category4 = models.CharField(required=True)
+    # category5 = models.CharField(required=True)
+    # category6 = models.CharField(required=True)
+    # query  = models.CharField(required=True)
+    # title  = models.CharField(required=True)
     
     class Meta(UserCreationForm.Meta):
         model = User
