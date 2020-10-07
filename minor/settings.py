@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'crispy_forms',
     'widget_tweaks',
+    "django_select2",
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -85,7 +86,7 @@ WSGI_APPLICATION = 'minor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jobrec' ,
+        'NAME': 'jobrecdb' ,
         'USER': 'postgres',
         'PASSWORD' : '1234',
         'HOST': 'localhost',

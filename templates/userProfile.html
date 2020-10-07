@@ -25,6 +25,14 @@
    <h2> not authenticated</h2>
    {% endif %}
 
+   {% for r in recm %}
+    <ol>{{r.index}}</ol>
+    <ol>{{r.jobid}}</ol>
+    <ol>{{r.jobtitle}}</ol>
+    <ol>{{r.score}}</ol>
+   {% endfor %}
+    
+
 
 </div>
 </div>

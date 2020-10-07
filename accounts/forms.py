@@ -1,7 +1,23 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
-from .models import Jobseeker, Jobcreator,User
+from .models import *
+from django_select2.forms import Select2MultipleWidget
+
+skills_choices = [
+    ('.net', '.Net'),
+    ('c#', 'C#'),
+    ('python', 'Python'),
+    ('sql','Sql'),
+    ('html','Html'),
+    ('css','Css'),
+    ('javascript','Javascript'),
+    ('jquery','Jquery'),
+    ('java','Java'),
+    ('r','R'),
+    ('php','PHP'),
+]
+
 
 class JobseekerForm(UserCreationForm):
     first_name = forms.CharField(required=True)
@@ -10,6 +26,12 @@ class JobseekerForm(UserCreationForm):
     image = forms.ImageField(required=True)
     address = forms.CharField(required=True)
     phone = forms.CharField(required=True)
+    skills = forms.MultipleChoiceField(
+        #required=False,
+        #widget=forms.CheckboxSelectMultiple,
+        widget=Select2MultipleWidget,
+        choices=skills_choices,
+    )
     
     class Meta(UserCreationForm.Meta):
         model = User
@@ -29,6 +51,7 @@ class JobseekerForm(UserCreationForm):
         jobseeker.phone=self.cleaned_data.get('phone')
         jobseeker.address=self.cleaned_data.get('address')
         jobseeker.image=self.cleaned_data.get('image')
+        jobseeker.skills = self.cleaned_data.get('skills')
         jobseeker.save()
         return user
 
