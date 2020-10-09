@@ -23,7 +23,7 @@ class Jobseeker(models.Model):
     ('css','Css'),
     ]
     #skills = models.CharField(max_length=100,blank=True,verbose_name="Select")
-    skills = models.TextField(default='c')
+    skills = models.TextField()
 
 class Jobcreator(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key= True)

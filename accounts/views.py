@@ -9,6 +9,9 @@ from django.views.generic import CreateView
 import pandas as pd
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
+import sqlalchemy
+
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec')
 
 def register(request):
     return render(request, "register.html")
@@ -61,76 +64,146 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-def userProfile(request):
-    df_joblist = pd.read_csv('df_joblist.csv')
-    tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
-    tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
+def skillsform(request):
+    if request.method == "POST":
+        id= request.POST["id"]
+        category1 = request.POST["category1"]
+        category2 = request.POST["category2"]
+        category3 = request.POST["category3"]
+        category4 = request.POST["category4"]
+        category5 = request.POST["category5"]
+        category6 = request.POST["category6"]
+        query = request.POST["query"]
+        title = request.POST["title"]
     
+        user_skills = skills(id=id,category1=category1,category2=category2,category3=category3,category4=category4,category5=category5,category6=category6,query=query,title=title)
+        user_skills.save()
+        return redirect("login.html")
+
+    else:
+        return render(request, "skillsform.html")
+
+
+ 
+def userProfile(request):
+
     current_user = request.user
     u_id = current_user.id
     u_list = Jobseeker.objects.get(pk=u_id)
     u_skills = u_list.skills
-  
 
-    data = {
-        'id':u_id,
-        'Key_word':u_skills
-    }
-    user_q=pd.DataFrame(data,columns=['id','Key_word'],index=['0'])
-    z=user_q.id[0]
+    recm = jobrec.objects.filter(index=u_id)
+    if jobrec.objects.filter(index=u_id).exists() == False:
+        #df_joblist = pd.read_csv('df_joblist.csv')
+        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','jobdescription','skills'])
+        #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
+        #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
+        import nltk
+        nltk.download('punkt')
+        nltk.download('wordnet')
+        nltk.download('stopwords')
+        from nltk.corpus import stopwords
+        from nltk.stem import WordNetLemmatizer
+        from nltk import word_tokenize
+        import re
+        import string
 
-   
+        wn = WordNetLemmatizer()
+        stopwords = nltk.corpus.stopwords.words('english')
 
+        def stop_word(word):
+                if word not in stopwords:
+                    return word
 
-
+        def clean_txt(text):
+            clean_text = []
+            clean_text2 = []
+            text = re.sub("'", "",str(text))
+            text = re.sub("/", " ",str(text))
+            for w in word_tokenize(text.lower()):
+                if stop_word(w):
+                    clean_text.append(wn.lemmatize(w,pos="v"))
+            for word in clean_text :
+                if stop_word(word):
+                    clean_text2.append(word)
+            return " ".join(clean_text2)
+        
+        df_joblist['skills'] = df_joblist['skills'].apply(clean_txt)
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        tfidf_vectorizer = TfidfVectorizer()
+        tfidf_jobid = tfidf_vectorizer.fit_transform(df_joblist['skills']) #fitting and transforming the vector
     
-    user_tfidf = tfidf_vectorizer.transform(user_q['Key_word'])
-    
+        
+        #u_skill = u_list.skill
+        #context={'skills':u_skills,'skill':u_skill}
+        #return render(request,"feed.html",context)
+        
+        data = {
+            'id':u_id,
+            'Key_word':u_skills
+        }
+        user_q=pd.DataFrame(data,columns=['id','Key_word'],index=['0'])
+        z=user_q.id[0]
 
-    cos_similarity_tfidf = map(lambda x: cosine_similarity(user_tfidf, x),tfidf_jobid)
-   
-    output2 = list(cos_similarity_tfidf)
-    
-
-    def get_recommendation(top, df_joblist, scores):
-        recommendation = pd.DataFrame(columns = ['index', 'jobid',  'jobtitle', 'score'])
-        count = 0
-        for i in top:
-            recommendation.at[count, 'index'] = z
-            recommendation.at[count, 'jobid'] = df_joblist['jobid'][i]
-            recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
-            recommendation.at[count, 'score'] =  scores[count]
-            count += 1
-        return recommendation
-    top = sorted(range(len(output2)), key=lambda i: output2[i], reverse=True)[:20] #sorted(iterable,key=func,reverse)
-    #print(len(output2))
-    #print(top)
-    list_scores = [output2[i][0][0] for i in top]
-    #print(list_scores)
-    op=get_recommendation(top,df_joblist, list_scores)
-
-    for i in range(len(op)):
-        index = op['index'].values[i]
-        jobid = op['jobid'].values[i]
-        jobtitle = op['jobtitle'].values[i]
-        score = op['score'].values[i]
-
-        rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,score=score)
-        rec_info.save()
+        #data = {'id':1234,
+        #    'title':'Python Developer',
+        #    'Key_word':'python django sql flask'}
+        #user_q=pd.DataFrame(data,columns=['id','title','Key_word'],index=['0'])
+        #z=user_q.id[0]
+        
 
 
-        current_user = request.user
-        u_id = current_user.id
-        #u_list = Jobseeker.objects.get(pk=u_id)
+        
+        user_tfidf = tfidf_vectorizer.transform(user_q['Key_word'])
+        #print(user_tfidf) #(row_index,col(word)index)
+
+        cos_similarity_tfidf = map(lambda x: cosine_similarity(user_tfidf, x),tfidf_jobid)
+        #cos_similarity_tfidf = cosine_similarity(user_tfidf,tfidf_jobid)
+        #print(cos_similarity_tfidf)
+        output2 = list(cos_similarity_tfidf)
+        #len(output2)
+
+        def get_recommendation(top, df_joblist, scores):
+            recommendation = pd.DataFrame(columns = ['index', 'jobid',  'jobtitle', 'score'])
+            count = 0
+            for i in top:
+                recommendation.at[count, 'index'] = z
+                recommendation.at[count, 'jobid'] = df_joblist['jobid'][i]
+                recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
+                recommendation.at[count, 'score'] =  scores[count]
+                count += 1
+            return recommendation
+        top = sorted(range(len(output2)), key=lambda i: output2[i], reverse=True)[:5] #sorted(iterable,key=func,reverse)
+        #print(len(output2))
+        #print(top)
+        list_scores = [output2[i][0][0] for i in top]
+        #print(list_scores)
+        op=get_recommendation(top,df_joblist, list_scores)
+
+        
+        for i in range(len(op)):
+            index = op['index'].values[i]
+            jobid = op['jobid'].values[i]
+            jobtitle = op['jobtitle'].values[i]
+            score = op['score'].values[i]
+
+            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,score=score)
+            rec_info.save()
+
+
+            #current_user = request.user
+            #u_id = current_user.id
+            #u_list = Jobseeker.objects.get(pk=u_id)
         recm = jobrec.objects.filter(index=u_id)
-
+    else:
+        recm = jobrec.objects.filter(index=u_id)
     
-    context = {'recm':recm}
+    jobseeker = Jobseeker.objects.get(pk=u_id)
+
+    context = {'recm':recm,'jobseeker':jobseeker}
     
 
     return render(request, "userProfile.html",context)   
 
 def empProfile(request):
     return render(request, "empProfile.html")  
-
-
