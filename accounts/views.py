@@ -11,7 +11,7 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec')
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrecdb')
 
 def register(request):
     return render(request, "register.html")
@@ -64,27 +64,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-def skillsform(request):
-    if request.method == "POST":
-        id= request.POST["id"]
-        category1 = request.POST["category1"]
-        category2 = request.POST["category2"]
-        category3 = request.POST["category3"]
-        category4 = request.POST["category4"]
-        category5 = request.POST["category5"]
-        category6 = request.POST["category6"]
-        query = request.POST["query"]
-        title = request.POST["title"]
-    
-        user_skills = skills(id=id,category1=category1,category2=category2,category3=category3,category4=category4,category5=category5,category6=category6,query=query,title=title)
-        user_skills.save()
-        return redirect("login.html")
-
-    else:
-        return render(request, "skillsform.html")
-
-
- 
 def userProfile(request):
 
     current_user = request.user
