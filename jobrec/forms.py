@@ -16,7 +16,3 @@ class JobPostForm(forms.ModelForm):
         model = JoblistTable
         fields = ('jobid','advertiserurl','company','jobstatus','jobdescription','joblocation','jobtitle','skills')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> db34ad5806e1102e071e82ac2d2df294b61ac44c
