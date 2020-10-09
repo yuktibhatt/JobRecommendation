@@ -11,17 +11,19 @@ class User(AbstractUser):
 class Jobseeker(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key= True)
     phone = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='img')
     address = models.CharField(max_length=100)
-    # category1 = models.CharField(max_length=100)
-    # category2 = models.CharField(max_length=100)
-    # category3 = models.CharField(max_length=100)
-    # category4 = models.CharField(max_length=100)
-    # category5 = models.CharField(max_length=100)
-    # category6 = models.CharField(max_length=100)
-    # query  = models.CharField(max_length=100)
-    # title  = models.CharField(max_length=100)
-    
+    image = models.ImageField(upload_to='images/', blank= True, null = True)
+    #skills = models.ManyToManyField(Skills)
+    skill_choices = [
+    ('.net', '.Net'),
+    ('c#', 'C#'),
+    ('python', 'Python'),
+    ('sql','Sql'),
+    ('html','Html'),
+    ('css','Css'),
+    ]
+    #skills = models.CharField(max_length=100,blank=True,verbose_name="Select")
+    skills = models.TextField(default='c')
 
 class Jobcreator(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key= True)
@@ -29,14 +31,9 @@ class Jobcreator(models.Model):
     contact = models.CharField(max_length=100)
     
 
-# class skills(models.Model):
-#     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key= True, db_column="id")
-#     category1 = models.CharField(max_length=100)
-#     category2 = models.CharField(max_length=100)
-#     category3 = models.CharField(max_length=100)
-#     category4 = models.CharField(max_length=100)
-#     category5 = models.CharField(max_length=100)
-#     category6 = models.CharField(max_length=100)
-#     query  = models.CharField(max_length=100)
-#     title  = models.CharField(max_length=100)
+class jobrec(models.Model):
+    index = models.IntegerField(primary_key=False)
+    jobid = models.CharField(max_length=50,default='Dice:')
+    jobtitle = models.TextField(50)
+    score = models.IntegerField(primary_key=False)
 
