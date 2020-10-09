@@ -10,6 +10,6 @@ urlpatterns = [
     path("logout",views.logout_view, name="logout"),
     path("userProfile",views.userProfile, name="userProfile"),
     path("empProfile",views.empProfile, name="empProfile"),
-    path("skillsform",views.skillsform, name="skillsform"),
+    
     
    ]
