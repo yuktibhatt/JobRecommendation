@@ -10,3 +10,4 @@ sklearn
 pandas
 django-select2
 sqlalchemy
+nltk
