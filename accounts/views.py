@@ -11,11 +11,7 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
-<<<<<<< HEAD
 engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec')
-=======
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrecdb')
->>>>>>> db34ad5806e1102e071e82ac2d2df294b61ac44c
 
 def register(request):
     return render(request, "register.html")
