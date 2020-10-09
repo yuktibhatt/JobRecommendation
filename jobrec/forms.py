@@ -2,6 +2,7 @@ from django import forms
 from .models import *
 
 class JobPostForm(forms.ModelForm):
+    jobid = forms.CharField()
     advertiserurl = forms.CharField()
     company = forms.CharField()
     jobstatus = forms.CharField()
@@ -13,6 +14,6 @@ class JobPostForm(forms.ModelForm):
 
     class Meta:
         model = JoblistTable
-        fields = ('advertiserurl','company','jobstatus','jobdescription','joblocation','jobtitle','skills','jobid')
+        fields = ('jobid','advertiserurl','company','jobstatus','jobdescription','joblocation','jobtitle','skills')
 
 

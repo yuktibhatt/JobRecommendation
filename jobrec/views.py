@@ -6,6 +6,15 @@ from .forms import *
 def index(request):
     return render(request, "index.html")
 
+import pandas as pd
+import sqlalchemy
+
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec')
+def jobs(request):
+    df = pd.read_sql_table('accounts_jobseeker',engine)
+    print(df)
+    return render(request,"jobs.html")
+
 def postjob(request):
      return render(request, "postjob.html")
 
@@ -23,6 +32,7 @@ class jobPost(TemplateView):
         form = JobPostForm(request.POST)
         if form.is_valid():
             form.save()
+            jobid = form.cleaned_data['jobid']
             advertiserurl = form.cleaned_data['advertiserurl']
             company = form.cleaned_data['company']
             jobstatus = form.cleaned_data['jobstatus']

@@ -8,4 +8,4 @@ urlpatterns = [
     path('', include('jobrec.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-]
+] 
