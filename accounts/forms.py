@@ -6,6 +6,7 @@ from django_select2.forms import Select2MultipleWidget
 
 skills_choices = [
     ('.net', '.Net'),
+<<<<<<< HEAD
     ('.net-core','.Net-core'),
     ('ajax','Ajax'), 
     ('amazon-web-services','Amazon-web-services'), 
@@ -46,6 +47,18 @@ skills_choices = [
     ('xml','Xml')
     
     
+=======
+    ('c#', 'C#'),
+    ('python', 'Python'),
+    ('sql','Sql'),
+    ('html','Html'),
+    ('css','Css'),
+    ('javascript','Javascript'),
+    ('jquery','Jquery'),
+    ('java','Java'),
+    ('r','R'),
+    ('php','PHP'),
+>>>>>>> db34ad5806e1102e071e82ac2d2df294b61ac44c
 ]
 
 
