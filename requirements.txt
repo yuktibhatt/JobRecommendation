@@ -8,10 +8,6 @@ sqlparse==0.3.1
 django-widget-tweaks==1.4.8
 sklearn
 pandas
-<<<<<<< HEAD
 django-select2
 sqlalchemy
 nltk
-=======
-django-select2
->>>>>>> db34ad5806e1102e071e82ac2d2df294b61ac44c
