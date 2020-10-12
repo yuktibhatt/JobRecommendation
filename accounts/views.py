@@ -185,4 +185,12 @@ def userProfile(request):
     return render(request, "userProfile.html",context)   
 
 def empProfile(request):
+
+    current_user = request.user
+    u_id = current_user.id
+    u_list = Jobcreator.objects.get(pk=u_id)
+   
+
+
     return render(request, "empProfile.html")  
+    

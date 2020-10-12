@@ -14,13 +14,46 @@ class Jobseeker(models.Model):
     address = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images/', blank= True, null = True)
     #skills = models.ManyToManyField(Skills)
-    skill_choices = [
+    skills_choices = [
     ('.net', '.Net'),
+    ('.net-core','.Net-core'),
+    ('ajax','Ajax'), 
+    ('amazon-web-services','Amazon-web-services'), 
+    ('angularjs','Angularjs'), 
+    ('architecture','Architecture'), 
+    ('asp.net','asp.net'), 
+    ('azure','Azure'), 
+    ('big-data','Big-data'),
     ('c#', 'C#'),
-    ('python', 'Python'),
-    ('sql','Sql'),
-    ('html','Html'),
-    ('css','Css'),
+    ('c','C'),
+    ('c++','C++'), 
+    ('cloud','Cloud'), 
+    ('css','Css'), 
+    ('docker','Docker'), 
+    ('hadoop','Hadoop'), 
+    ('html','Html'), 
+    ('java','Java'), 
+    ('javascript','Javascript'), 
+    ('jquery','Jquery'), 
+    ('keras','Keras'), 
+    ('machine-learning','Machine-learning'), 
+    ('mongodb','Mongodg'), 
+    ('mysql','mysql'), 
+    ('oracle','Oracle'), 
+    ('php','PHP'), 
+    ('postgresql','Postgresql'), 
+    ('project-management','Project-management'), 
+    ('python','Python'), 
+    ('r','R'), 
+    ('reactjs','Reactjs'), 
+    ('rest','Rest'), 
+    ('ruby','Ruby'), 
+    ('scala','Sacla'), 
+    ('scikit-learn','Scikit-learn'), 
+    ('software-design','Software-design'), 
+    ('spark','Spark'), 
+    ('sql','Sql'), 
+    ('xml','Xml')
     ]
     #skills = models.CharField(max_length=100,blank=True,verbose_name="Select")
     skills = models.TextField()
