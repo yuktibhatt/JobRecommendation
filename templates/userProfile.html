@@ -62,7 +62,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
+    <a href="#" class="brand-link">
      
       <span class="brand-text font-weight-dark">Job Recommendation</span>
     </a>
@@ -72,10 +72,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src={{jobseeker.image.url}} class="img-circle elevation-2">
+          <img src={{jobseeker.image.url}} class="img-circle elevation-2">  
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{user.first_name}} {{user.last_name}}</a>
+          <a href="{% url 'userProfile' %}" class="d-block">{{user.first_name}} {{user.last_name}}</a>
         </div>
       </div>
 
@@ -162,8 +162,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index">Home</a></li>
-              <li class="breadcrumb-item active"><a href="#">Jobs</a></li>
+              <li class="breadcrumb-item"><a href={% url 'userProfile' %}>Home</a></li>
+              <li class="breadcrumb-item active"><a href="{% url 'userProfile' %}">Jobs</a></li>
               
             </ol>
           </div>
@@ -195,7 +195,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-              <button type="button" class="btn btn-secondary">Apply<i class="fas fa-heart"></i></button>
+              <button type="button" class="btn btn-secondary">Apply <i class="fas fa-heart"></i></button>
                 </div>
                 <!-- /.card-footer-->
             </div>
@@ -217,7 +217,7 @@
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 0.0.1
     </div>
-    <strong>Copyright &copy; 2020 <a href="http://adminlte.io">Job Recommendation</a>.</strong> All rights
+    <strong>Copyright &copy; 2020 <a href="{% url 'index' %}">Job Recommendation</a>.</strong> All rights
     reserved.
   </footer>
 

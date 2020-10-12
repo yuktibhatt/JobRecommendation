@@ -113,9 +113,7 @@ def userProfile(request):
         tfidf_jobid = tfidf_vectorizer.fit_transform(df_joblist['skills']) #fitting and transforming the vector
     
         
-        #u_skill = u_list.skill
-        #context={'skills':u_skills,'skill':u_skill}
-        #return render(request,"feed.html",context)
+      
         
         data = {
             'id':u_id,
@@ -124,21 +122,15 @@ def userProfile(request):
         user_q=pd.DataFrame(data,columns=['id','Key_word'],index=['0'])
         z=user_q.id[0]
 
-        #data = {'id':1234,
-        #    'title':'Python Developer',
-        #    'Key_word':'python django sql flask'}
-        #user_q=pd.DataFrame(data,columns=['id','title','Key_word'],index=['0'])
-        #z=user_q.id[0]
-        
+     
 
 
         
         user_tfidf = tfidf_vectorizer.transform(user_q['Key_word'])
-        #print(user_tfidf) #(row_index,col(word)index)
+        
 
         cos_similarity_tfidf = map(lambda x: cosine_similarity(user_tfidf, x),tfidf_jobid)
-        #cos_similarity_tfidf = cosine_similarity(user_tfidf,tfidf_jobid)
-        #print(cos_similarity_tfidf)
+       
         output2 = list(cos_similarity_tfidf)
         #len(output2)
 
@@ -186,9 +178,7 @@ def userProfile(request):
 
 def empProfile(request):
 
-    current_user = request.user
-    u_id = current_user.id
-    u_list = Jobcreator.objects.get(pk=u_id)
+    
    
 
 
