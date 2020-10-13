@@ -177,10 +177,5 @@ def userProfile(request):
     return render(request, "userProfile.html",context)   
 
 def empProfile(request):
-
-    
-   
-
-
     return render(request, "empProfile.html")  
     
