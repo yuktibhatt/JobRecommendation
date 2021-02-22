@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .models import *
+from jobrec.models import *
 from .forms import JobseekerForm,JobcreatorForm
 from django.views.generic import CreateView 
 
@@ -74,7 +75,7 @@ def userProfile(request):
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
         #df_joblist = pd.read_csv('df_joblist.csv')
-        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','jobdescription','skills'])
+        df_joblist = pd.read_sql_table('jobrec_jobs',engine,columns=['jobid','jobtitle','jobdescription','skills'])
         #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
         #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
         import nltk
@@ -177,5 +178,14 @@ def userProfile(request):
     return render(request, "userProfile.html",context)   
 
 def empProfile(request):
-    return render(request, "empProfile.html")  
+    current_user = request.user
+    u_id = current_user.id
+    #jobinfo = JoblistTable.objects.get(createruser_id=u_id)
+    if JoblistTable.objects.filter(createruser_id=u_id).exists() == False :
+        return render(request,"empProfile.html")
+    else:
+        jobinfo = JoblistTable.objects.get(createruser_id=u_id)
+        jobcreater = Jobcreator.objects.get(pk= u_id)
+        context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
+        return render(request, "empProfile.html",context)  
     
