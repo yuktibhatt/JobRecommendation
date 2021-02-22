@@ -26,7 +26,24 @@ class registerUser(CreateView):
         login(self.request, user)
         return redirect("login")
 
+# class registerUser(CreateView):
+#     model = User
+#     form_class= JobseekerForm
+#     template_name= '../templates/registerUser.html'
     
+#     def registerUser(request,id=0):
+#         if request.method=="GET":
+#             model= User
+#             form =JobseekerForm()
+#             return render(request,"registerUser.html")
+#         else:
+#             form=JobseekerForm(request.POST)
+#             if form.is_valid():
+#             form.save()
+#             return redirect("login")
+
+# def updateProfile(request,id):
+#     return render(request, '../templates/updateProfile.html' ,{'id':id})
 
 class registerEmp(CreateView):
     model=User

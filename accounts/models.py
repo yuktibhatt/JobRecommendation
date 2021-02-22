@@ -37,7 +37,7 @@ class Jobseeker(models.Model):
     ('jquery','Jquery'), 
     ('keras','Keras'), 
     ('machine-learning','Machine-learning'), 
-    ('mongodb','Mongodg'), 
+    ('mongodb','Mongodb'), 
     ('mysql','mysql'), 
     ('oracle','Oracle'), 
     ('php','PHP'), 
