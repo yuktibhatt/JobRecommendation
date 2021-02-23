@@ -181,11 +181,11 @@ def empProfile(request):
     current_user = request.user
     u_id = current_user.id
     #jobinfo = JoblistTable.objects.get(createruser_id=u_id)
-    if JoblistTable.objects.filter(createruser_id=u_id).exists() == False :
-        return render(request,"empProfile.html")
-    else:
-        jobinfo = JoblistTable.objects.get(createruser_id=u_id)
-        jobcreater = Jobcreator.objects.get(pk= u_id)
-        context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
-        return render(request, "empProfile.html",context)  
+    # if JoblistTable.objects.filter(createruser_id=u_id).exists() == False :
+    #     return render(request,"empProfile.html")
+    # else:
+    jobinfo = JoblistTable.objects.filter(createruser_id=u_id)
+    jobcreater = Jobcreator.objects.filter(pk= u_id)
+    context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
+    return render(request, "empProfile.html",context)  
     

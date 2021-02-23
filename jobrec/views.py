@@ -43,7 +43,12 @@ class jobPost(TemplateView):
             skills = form.cleaned_data['skills']
 
             form = JobPostForm()
+<<<<<<< HEAD
             return redirect("index")
+=======
+            
+            return redirect("empProfile")
+>>>>>>> 1c3b60e2b9e46add4a987a4dfecffacb965ae70c
 
 
         args = {'form':form,'jobid':jobid,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'advertiserurl':advertiserurl,'jobtitle':jobtitle,'skills':skills}
