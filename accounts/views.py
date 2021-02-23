@@ -75,7 +75,7 @@ def userProfile(request):
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
         #df_joblist = pd.read_csv('df_joblist.csv')
-        df_joblist = pd.read_sql_table('jobrec_jobs',engine,columns=['jobid','jobtitle','jobdescription','skills'])
+        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills'])
         #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
         #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
         import nltk
@@ -136,12 +136,13 @@ def userProfile(request):
         #len(output2)
 
         def get_recommendation(top, df_joblist, scores):
-            recommendation = pd.DataFrame(columns = ['index', 'jobid',  'jobtitle', 'score'])
+            recommendation = pd.DataFrame(columns = ['index', 'jobid', 'advertiserurl' 'jobtitle', 'score'])
             count = 0
             for i in top:
                 recommendation.at[count, 'index'] = z
                 recommendation.at[count, 'jobid'] = df_joblist['jobid'][i]
                 recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
+                recommendation.at[count, 'advertiserurl'] = df_joblist['advertiserurl'][i]
                 recommendation.at[count, 'score'] =  scores[count]
                 count += 1
             return recommendation
@@ -157,9 +158,10 @@ def userProfile(request):
             index = op['index'].values[i]
             jobid = op['jobid'].values[i]
             jobtitle = op['jobtitle'].values[i]
+            advertiserurl=  op['advertiserurl'].values[i]
             score = op['score'].values[i]
 
-            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,score=score)
+            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score)
             rec_info.save()
 
 
