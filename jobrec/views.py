@@ -43,10 +43,10 @@ class jobPost(TemplateView):
             skills = form.cleaned_data['skills']
 
             form = JobPostForm()
-            
             return redirect("index")
 
-        args = {'form':form,'advertiserurl':advertiserurl,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'jobtitle':jobtitle,'skills':skills,'jobid':jobid}
-        return render (request,self.template_name,args)
+
+        args = {'form':form,'jobid':jobid,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'advertiserurl':advertiserurl,'jobtitle':jobtitle,'skills':skills}
+        return render(request,self.template_name,args)
 
     
