@@ -44,7 +44,7 @@ class jobPost(TemplateView):
 
             form = JobPostForm()
             
-            return redirect("index")
+            return redirect("empProfile")
 
         args = {'form':form,'advertiserurl':advertiserurl,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'jobtitle':jobtitle,'skills':skills,'jobid':jobid}
         return render (request,self.template_name,args)
