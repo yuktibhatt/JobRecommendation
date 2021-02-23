@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .models import *
+from jobrec.models import *
 from .forms import JobseekerForm,JobcreatorForm
 from django.views.generic import CreateView 
 
@@ -26,7 +27,24 @@ class registerUser(CreateView):
         login(self.request, user)
         return redirect("login")
 
+# class registerUser(CreateView):
+#     model = User
+#     form_class= JobseekerForm
+#     template_name= '../templates/registerUser.html'
     
+#     def registerUser(request,id=0):
+#         if request.method=="GET":
+#             model= User
+#             form =JobseekerForm()
+#             return render(request,"registerUser.html")
+#         else:
+#             form=JobseekerForm(request.POST)
+#             if form.is_valid():
+#             form.save()
+#             return redirect("login")
+
+# def updateProfile(request,id):
+#     return render(request, '../templates/updateProfile.html' ,{'id':id})
 
 class registerEmp(CreateView):
     model=User
@@ -74,7 +92,7 @@ def userProfile(request):
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
         #df_joblist = pd.read_csv('df_joblist.csv')
-        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','jobdescription','skills'])
+        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills'])
         #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
         #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
         import nltk
@@ -135,12 +153,13 @@ def userProfile(request):
         #len(output2)
 
         def get_recommendation(top, df_joblist, scores):
-            recommendation = pd.DataFrame(columns = ['index', 'jobid',  'jobtitle', 'score'])
+            recommendation = pd.DataFrame(columns = ['index', 'jobid', 'advertiserurl' 'jobtitle', 'score'])
             count = 0
             for i in top:
                 recommendation.at[count, 'index'] = z
                 recommendation.at[count, 'jobid'] = df_joblist['jobid'][i]
                 recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
+                recommendation.at[count, 'advertiserurl'] = df_joblist['advertiserurl'][i]
                 recommendation.at[count, 'score'] =  scores[count]
                 count += 1
             return recommendation
@@ -156,9 +175,10 @@ def userProfile(request):
             index = op['index'].values[i]
             jobid = op['jobid'].values[i]
             jobtitle = op['jobtitle'].values[i]
+            advertiserurl=  op['advertiserurl'].values[i]
             score = op['score'].values[i]
 
-            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,score=score)
+            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score)
             rec_info.save()
 
 
@@ -177,5 +197,14 @@ def userProfile(request):
     return render(request, "userProfile.html",context)   
 
 def empProfile(request):
-    return render(request, "empProfile.html")  
+    current_user = request.user
+    u_id = current_user.id
+    #jobinfo = JoblistTable.objects.get(createruser_id=u_id)
+    # if JoblistTable.objects.filter(createruser_id=u_id).exists() == False :
+    #     return render(request,"empProfile.html")
+    # else:
+    jobinfo = JoblistTable.objects.filter(createruser_id=u_id)
+    jobcreater = Jobcreator.objects.filter(pk= u_id)
+    context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
+    return render(request, "empProfile.html",context)  
     
