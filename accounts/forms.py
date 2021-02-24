@@ -110,3 +110,23 @@ class JobcreatorForm(UserCreationForm):
         jobcreator.contact=self.cleaned_data.get('contact')
         jobcreator.save()
         return user
+
+
+# class userUpdateForm(UserCreationForm):
+#     first_name = forms.CharField(required=True)
+#     last_name = forms.CharField(required=True)
+#     email = forms.CharField(required=True)
+#     image = forms.ImageField(required=True)
+#     address = forms.CharField(required=True)
+#     phone = forms.CharField(required=True)
+#     skills = forms.MultipleChoiceField(
+#         #required=False,
+#         #widget=forms.CheckboxSelectMultiple,
+#         widget=Select2MultipleWidget,
+#         choices=skills_choices,
+#     )
+    
+#     class Meta(UserCreationForm.Meta):
+#         model = User
+#         fields= ('first_name','last_name', 'username','email', 'image','address','phone','skills')
+        

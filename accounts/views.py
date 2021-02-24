@@ -43,8 +43,13 @@ class registerUser(CreateView):
 #             form.save()
 #             return redirect("login")
 
-# def updateProfile(request,id):
-#     return render(request, '../templates/updateProfile.html' ,{'id':id})
+# def updateProfile(request):
+#     u_form = userUpdateForm(instance=request.user)
+
+#     context={
+#        'u_form' :  u_form
+#     }
+#     return render(request, '../templates/updateProfile.html' ,context)
 
 class registerEmp(CreateView):
     model=User
@@ -199,10 +204,7 @@ def userProfile(request):
 def empProfile(request):
     current_user = request.user
     u_id = current_user.id
-    #jobinfo = JoblistTable.objects.get(createruser_id=u_id)
-    # if JoblistTable.objects.filter(createruser_id=u_id).exists() == False :
-    #     return render(request,"empProfile.html")
-    # else:
+
     jobinfo = JoblistTable.objects.filter(createruser_id=u_id)
     jobcreater = Jobcreator.objects.filter(pk= u_id)
     context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
