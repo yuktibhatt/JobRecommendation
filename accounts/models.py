@@ -70,4 +70,10 @@ class jobrec(models.Model):
     jobtitle = models.TextField(50)
     advertiserurl = models.CharField(max_length=500,default='null')
     score = models.IntegerField(primary_key=False)
+    company = models.CharField(max_length=2000, default='null')
+    jobstatus = models.CharField(max_length=500, default='null')
+    jobdescription = models.TextField(default='Job Description')
+    joblocation = models.CharField(max_length=200, default='null')
+    
+
 
