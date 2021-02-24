@@ -1,10 +1,14 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from .models import *
 from .forms import *
 
 def index(request):
-    return render(request, "index.html")
+    QuerySet= JoblistTable.objects.all()
+    context= {'QuerySet':QuerySet}
+        
+    return render(request, "index.html", context)
 
 import pandas as pd
 import sqlalchemy
