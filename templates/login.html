@@ -13,10 +13,11 @@
 <body>
 <section >
 {% if user.is_authenticated %}
-<div style="display:flex, align-items: center;
-  justify-content: center;">
+{% if user.is_jobseeker %}
 <h1>You are currently logged in. Please return to <a href="userProfile">Your Profile</a></h1>
-</div>
+{% else %}
+<h1>You are currently logged in. Please return to <a href="empProfile">Your Profile</a></h1>
+{% endif %}
     {% else %}
     <div style="background-image: "{% static 'img/bg1.jpg' %}", background-repeat: no-repeat;">
         <div class="container">
