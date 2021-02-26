@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'minor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jobrecdb' ,
+        'NAME': 'jobrec1' ,
         'USER': 'postgres',
         'PASSWORD' : '1234',
         'HOST': 'localhost',

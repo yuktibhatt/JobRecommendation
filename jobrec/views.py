@@ -1,15 +1,18 @@
 from django.shortcuts import render,redirect
+from django.db.models.query import QuerySet
 from django.views.generic import TemplateView
 from .models import *
 from .forms import *
 
 def index(request):
-    return render(request, "index.html")
+    QuerySet= JoblistTable.objects.all()
+    context= {'QuerySet':QuerySet}
+    return render(request, "index.html", context)
 
 import pandas as pd
 import sqlalchemy
 
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrecdb')
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec1')
 def jobs(request):
     df = pd.read_sql_table('accounts_jobseeker',engine)
     print(df)

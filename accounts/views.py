@@ -12,7 +12,7 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrecdb')
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec1')
 
 def register(request):
     return render(request, "register.html")
@@ -97,7 +97,7 @@ def userProfile(request):
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
         #df_joblist = pd.read_csv('df_joblist.csv')
-        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills'])
+        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
         #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
         #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
         import nltk
@@ -158,7 +158,7 @@ def userProfile(request):
         #len(output2)
 
         def get_recommendation(top, df_joblist, scores):
-            recommendation = pd.DataFrame(columns = ['index', 'jobid', 'advertiserurl' 'jobtitle', 'score'])
+            recommendation = pd.DataFrame(columns = ['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
             count = 0
             for i in top:
                 recommendation.at[count, 'index'] = z
@@ -166,6 +166,10 @@ def userProfile(request):
                 recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
                 recommendation.at[count, 'advertiserurl'] = df_joblist['advertiserurl'][i]
                 recommendation.at[count, 'score'] =  scores[count]
+                recommendation.at[count, 'jobdescription'] = df_joblist['jobdescription'][i]
+                recommendation.at[count, 'jobstatus'] = df_joblist['jobstatus'][i]
+                recommendation.at[count, 'company'] = df_joblist['company'][i]
+                recommendation.at[count, 'joblocation'] = df_joblist['joblocation'][i]
                 count += 1
             return recommendation
         top = sorted(range(len(output2)), key=lambda i: output2[i], reverse=True)[:5] #sorted(iterable,key=func,reverse)
@@ -182,8 +186,12 @@ def userProfile(request):
             jobtitle = op['jobtitle'].values[i]
             advertiserurl=  op['advertiserurl'].values[i]
             score = op['score'].values[i]
+            jobdescription = op['jobdescription'].values[i]
+            joblocation = op['joblocation'].values[i]
+            company = op['company'].values[i]
+            jobstatus = op['jobstatus'].values[i]
 
-            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score)
+            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score,jobdescription=jobdescription,jobstatus=jobstatus,company=company,joblocation=joblocation)
             rec_info.save()
 
 
