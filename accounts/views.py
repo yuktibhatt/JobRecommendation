@@ -12,6 +12,17 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
+# import nltk
+# nltk.download('punkt')
+# nltk.download('wordnet')
+# nltk.download('stopwords')
+# from nltk.corpus import stopwords
+# from nltk.stem import WordNetLemmatizer
+# from nltk import word_tokenize
+# import re
+# import string
+
+
 engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec1')
 
 def register(request):
@@ -96,10 +107,9 @@ def userProfile(request):
 
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
-        #df_joblist = pd.read_csv('df_joblist.csv')
+        
         df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
-        #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
-        #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
+        
         import nltk
         nltk.download('punkt')
         nltk.download('wordnet')

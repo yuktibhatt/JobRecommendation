@@ -14,9 +14,14 @@
 <section >
 {% if user.is_authenticated %}
 {% if user.is_jobseeker %}
-<h1>You are currently logged in. Please return to <a href="userProfile">Your Profile</a></h1>
+<div class="alert alert-primary" role="alert">
+  <h3 class="text-center">You are currently logged in. Please return to <a href="userProfile"  class="alert-link">Your Profile</a></h3>
+</div>
+
 {% else %}
-<h1>You are currently logged in. Please return to <a href="empProfile">Your Profile</a></h1>
+<div class="alert alert-primary" role="alert">
+  <h3 class="text-center">You are currently logged in. Please return to <a href="empProfile"  class="alert-link">Your Profile</a></h3>
+</div>
 {% endif %}
     {% else %}
     <div style="background-image: "{% static 'img/bg1.jpg' %}", background-repeat: no-repeat;">
