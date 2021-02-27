@@ -35,7 +35,7 @@ class registerUser(CreateView):
     
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        # login(self.request, user)
         return redirect("login")
 
 # class registerUser(CreateView):
@@ -69,7 +69,7 @@ class registerEmp(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        # login(self.request, user)
         return redirect("login")
 
 def login_view(request):
