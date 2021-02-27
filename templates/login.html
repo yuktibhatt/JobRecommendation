@@ -10,6 +10,13 @@
     crossorigin="anonymous">
     <title>Login</title>
 </head>
+ <style>
+    body
+   {
+     background-image:url(../static/img/banner/banner.png);
+     background-size: cover;
+   }
+   </style>
 <body>
 <section >
 {% if user.is_authenticated %}
@@ -24,7 +31,7 @@
 </div>
 {% endif %}
     {% else %}
-    <div style="background-image: "{% static 'img/bg1.jpg' %}", background-repeat: no-repeat;">
+    <div>
         <div class="container">
           <div class="row" style ="padding-top:170px">
             <div class="col-md-6 mx-auto">
