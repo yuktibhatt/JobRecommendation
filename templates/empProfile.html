@@ -17,6 +17,7 @@
   <script src="https://kit.fontawesome.com/7d69ebaad6.js" crossorigin="anonymous"></script>
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="hold-transition sidebar-mini layout-boxed">
 <!-- Site wrapper -->
@@ -135,6 +136,7 @@
                 </a>
             </li>
             {% endfor %}
+
               <li class="nav-item">
                 <a href="#" class="nav-link">
                  
@@ -207,13 +209,14 @@
                             </div>
                         </div>
                        <div class="description">
-                                            <p>Description: <br><p>{{info.jobdescription}}</p>
+                                            <p>Description: {{info.jobdescription}}</p>
                             </div>
                     </div>
                 </div>
             </div>
           </div>
           </div>
+          
           {% endfor %}
       </div>
      
