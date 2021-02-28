@@ -60,6 +60,9 @@ class userUpdate(TemplateView):
         if form.is_valid():
             #print("UPDATE FORM VALID")
             form.save(user=self.request.user)
+            current_user = self.request.user
+            u_id = current_user.id
+            jobrec.objects.filter(index=u_id).delete()
             return redirect('userProfile')
         #return render(self.request, self.template_name, {'form':form})
 
@@ -108,10 +111,7 @@ def userProfile(request):
 
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
-        
         df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['id','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
-    
-
         wn = WordNetLemmatizer()
         stopwords = nltk.corpus.stopwords.words('english')
 
