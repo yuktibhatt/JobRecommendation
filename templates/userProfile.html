@@ -107,15 +107,9 @@
             </a>
             <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'userUpdate'  %}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Update Profile</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Change Password</p>
                 </a>
               </li>
        </ul>
@@ -146,6 +140,12 @@
                 <a href="#" class="nav-link">
                   <i class="fas fa-phone"></i>
                   <p>{{jobseeker.phone}}</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class=""></i>
+                  <p>{{jobseeker.skills}}</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -199,6 +199,7 @@
                                 </div>
                                 <div class="jobs_conetent">
                                     <h4>{{r.jobtitle}}</h4>
+                                    <h5> {{r.company}}</h5>
                                     <div class="links_locat d-flex align-items-center">
                                         <div class="location">
                                             <p><i class="fa fa-map-marker"></i>{{r.joblocation}}</p>

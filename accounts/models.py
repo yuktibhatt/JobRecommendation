@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+import uuid
 
 
 class User(AbstractUser):
@@ -13,6 +13,7 @@ class Jobseeker(models.Model):
     phone = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images/', blank= True, null = True)
+    #uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     #skills = models.ManyToManyField(Skills)
     skills_choices = [
     ('.net', '.Net'),

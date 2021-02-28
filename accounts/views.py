@@ -1,18 +1,33 @@
+from typing import Callable
 from django.contrib.auth import login, logout,authenticate
-from django.shortcuts import render,redirect
+from django.forms.models import model_to_dict
+from django.http import request
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from . import forms
 from .models import *
 from jobrec.models import *
-from .forms import JobseekerForm,JobcreatorForm
-from django.views.generic import CreateView 
-
+from .forms import JobseekerForm,JobcreatorForm, JobseekerChangeForm
+from django.views.generic import CreateView
+from django.views.generic import TemplateView
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk import word_tokenize
+import re
 import pandas as pd
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
 engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrecdb')
+
+
 
 def register(request):
     return render(request, "register.html")
@@ -27,24 +42,24 @@ class registerUser(CreateView):
         login(self.request, user)
         return redirect("login")
 
-# class registerUser(CreateView):
-#     model = User
-#     form_class= JobseekerForm
-#     template_name= '../templates/registerUser.html'
-    
-#     def registerUser(request,id=0):
-#         if request.method=="GET":
-#             model= User
-#             form =JobseekerForm()
-#             return render(request,"registerUser.html")
-#         else:
-#             form=JobseekerForm(request.POST)
-#             if form.is_valid():
-#             form.save()
-#             return redirect("login")
+class userUpdate(TemplateView):
+    template_name = 'updateProfile.html'
 
-# def updateProfile(request,id):
-#     return render(request, '../templates/updateProfile.html' ,{'id':id})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        u = self.request.user
+        i = model_to_dict(u.jobseeker)
+        i.update(model_to_dict(u))
+        context["form"] = forms.JobseekerChangeForm(initial=i)
+        return context
+    
+    def post(self, *args, **kwargs):
+        form = forms.JobseekerChangeForm(data=self.request.POST, files=self.request.FILES, instance=self.request.user)
+        if form.is_valid():
+            #print("UPDATE FORM VALID")
+            form.save(user=self.request.user)
+            return redirect('userProfile')
+        #return render(self.request, self.template_name, {'form':form})
 
 class registerEmp(CreateView):
     model=User
@@ -95,15 +110,8 @@ def userProfile(request):
         df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
         #tfidf_vectorizer = pickle.load(open('tfidfvec.pkl','rb'))
         #tfidf_jobid = pickle.load(open('tfidfjob.pkl','rb'))
-        import nltk
-        nltk.download('punkt')
-        nltk.download('wordnet')
-        nltk.download('stopwords')
-        from nltk.corpus import stopwords
-        from nltk.stem import WordNetLemmatizer
-        from nltk import word_tokenize
-        import re
-        import string
+        
+
 
         wn = WordNetLemmatizer()
         stopwords = nltk.corpus.stopwords.words('english')
@@ -215,4 +223,6 @@ def empProfile(request):
     jobcreater = Jobcreator.objects.filter(pk= u_id)
     context = {'jobinfo':jobinfo,'jobcreater':jobcreater}
     return render(request, "empProfile.html",context)  
-    
+
+
+

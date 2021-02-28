@@ -110,3 +110,30 @@ class JobcreatorForm(UserCreationForm):
         jobcreator.contact=self.cleaned_data.get('contact')
         jobcreator.save()
         return user
+
+class JobseekerChangeForm(forms.ModelForm):
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
+    email = forms.CharField(required=False)
+    #image = forms.ImageField(required=False)
+    address = forms.CharField(required=False)
+    phone = forms.CharField(required=False)
+    skills = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        #widget=Select2MultipleWidget,
+        choices=skills_choices,
+    )
+
+    def save(self, user, *args, **kwargs):
+        #jobseeker= Jobseeker.objects.create(user=user)
+        user.jobseeker.phone=self.cleaned_data.get('phone')
+        user.jobseeker.address=self.cleaned_data.get('address')
+        #user.jobseeker.image=self.cleaned_data.get('image')
+        user.jobseeker.skills = self.cleaned_data.get('skills')
+        user.jobseeker.save()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        model = Jobseeker
+        fields = ['first_name','last_name', 'email', 'phone', 'address', 'skills']      
