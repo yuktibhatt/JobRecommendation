@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from .models import *
 from .forms import *
 
+
 def index(request):
     # QuerySet= JoblistTable.objects.all()
     # context= {'QuerySet':QuerySet}
@@ -17,7 +18,7 @@ def home(request):
 import pandas as pd
 import sqlalchemy
 
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec1')
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec2')
 def jobs(request):
     df = pd.read_sql_table('accounts_jobseeker',engine)
     print(df)
@@ -40,8 +41,7 @@ class jobPost(TemplateView):
             post = form.save(commit=False)
             post.createruser_id = request.user.id
             post.save()
-   
-            jobid = form.cleaned_data['jobid']
+
             advertiserurl = form.cleaned_data['advertiserurl']
             company = form.cleaned_data['company']
             jobstatus = form.cleaned_data['jobstatus']
@@ -55,7 +55,7 @@ class jobPost(TemplateView):
             return redirect("empProfile")
 
 
-        args = {'form':form,'jobid':jobid,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'advertiserurl':advertiserurl,'jobtitle':jobtitle,'skills':skills}
+        args = {'form':form,'company':company,'jobstatus':jobstatus,'jobdescription':jobdescription,'joblocation':joblocation,'advertiserurl':advertiserurl,'jobtitle':jobtitle,'skills':skills}
         return render(request,self.template_name,args)
 
     

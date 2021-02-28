@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from . import forms
 from .models import *
-from jobrec.models import *
+from jobrec.models import JoblistTable 
 from .forms import JobseekerForm,JobcreatorForm, JobseekerChangeForm
 from django.views.generic import CreateView
 from django.views.generic import TemplateView
@@ -18,18 +18,18 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy
 
-# import nltk
-# nltk.download('punkt')
-# nltk.download('wordnet')
-# nltk.download('stopwords')
-# from nltk.corpus import stopwords
-# from nltk.stem import WordNetLemmatizer
-# from nltk import word_tokenize
-# import re
-# import string
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk import word_tokenize
+import re
+import string
 
 
-engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec1')
+engine = sqlalchemy.create_engine('postgresql://postgres:1234@localhost:5432/jobrec2')
 
 def register(request):
     return render(request, "register.html")
@@ -109,17 +109,8 @@ def userProfile(request):
     recm = jobrec.objects.filter(index=u_id)
     if jobrec.objects.filter(index=u_id).exists() == False:
         
-        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
-        
-        import nltk
-        nltk.download('punkt')
-        nltk.download('wordnet')
-        nltk.download('stopwords')
-        from nltk.corpus import stopwords
-        from nltk.stem import WordNetLemmatizer
-        from nltk import word_tokenize
-        import re
-        import string
+        df_joblist = pd.read_sql_table('jobrec_joblisttable',engine,columns=['id','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
+    
 
         wn = WordNetLemmatizer()
         stopwords = nltk.corpus.stopwords.words('english')
@@ -169,11 +160,11 @@ def userProfile(request):
         #len(output2)
 
         def get_recommendation(top, df_joblist, scores):
-            recommendation = pd.DataFrame(columns = ['jobid','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
+            recommendation = pd.DataFrame(columns = ['id','jobtitle','advertiserurl','jobdescription','skills','jobstatus','company','joblocation'])
             count = 0
             for i in top:
                 recommendation.at[count, 'index'] = z
-                recommendation.at[count, 'jobid'] = df_joblist['jobid'][i]
+                recommendation.at[count, 'id'] = df_joblist['id'][i]
                 recommendation.at[count, 'jobtitle'] = df_joblist['jobtitle'][i]
                 recommendation.at[count, 'advertiserurl'] = df_joblist['advertiserurl'][i]
                 recommendation.at[count, 'score'] =  scores[count]
@@ -193,7 +184,7 @@ def userProfile(request):
         
         for i in range(len(op)):
             index = op['index'].values[i]
-            jobid = op['jobid'].values[i]
+            id = op['id'].values[i]
             jobtitle = op['jobtitle'].values[i]
             advertiserurl=  op['advertiserurl'].values[i]
             score = op['score'].values[i]
@@ -202,7 +193,7 @@ def userProfile(request):
             company = op['company'].values[i]
             jobstatus = op['jobstatus'].values[i]
 
-            rec_info = jobrec(index=index,jobid=jobid,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score,jobdescription=jobdescription,jobstatus=jobstatus,company=company,joblocation=joblocation)
+            rec_info = jobrec(index=index,id=id,jobtitle=jobtitle,advertiserurl=advertiserurl,score=score,jobdescription=jobdescription,jobstatus=jobstatus,company=company,joblocation=joblocation)
             rec_info.save()
 
 

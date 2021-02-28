@@ -66,7 +66,6 @@ class Jobcreator(models.Model):
 
 class jobrec(models.Model):
     index = models.IntegerField(primary_key=False)
-    jobid = models.CharField(max_length=50,default='Dice:')
     jobtitle = models.TextField(50)
     advertiserurl = models.CharField(max_length=500,default='null')
     score = models.IntegerField(primary_key=False)
