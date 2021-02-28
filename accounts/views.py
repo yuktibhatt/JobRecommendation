@@ -1,11 +1,17 @@
+from typing import Callable
 from django.contrib.auth import login, logout,authenticate
-from django.shortcuts import render,redirect
+from django.forms.models import model_to_dict
+from django.http import request
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from . import forms
 from .models import *
 from jobrec.models import *
-from .forms import JobseekerForm,JobcreatorForm
-from django.views.generic import CreateView 
+from .forms import JobseekerForm,JobcreatorForm, JobseekerChangeForm
+from django.views.generic import CreateView
+from django.views.generic import TemplateView
 
 import pandas as pd
 import pickle
@@ -38,29 +44,24 @@ class registerUser(CreateView):
         # login(self.request, user)
         return redirect("login")
 
-# class registerUser(CreateView):
-#     model = User
-#     form_class= JobseekerForm
-#     template_name= '../templates/registerUser.html'
+class userUpdate(TemplateView):
+    template_name = 'updateProfile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        u = self.request.user
+        i = model_to_dict(u.jobseeker)
+        i.update(model_to_dict(u))
+        context["form"] = forms.JobseekerChangeForm(initial=i)
+        return context
     
-#     def registerUser(request,id=0):
-#         if request.method=="GET":
-#             model= User
-#             form =JobseekerForm()
-#             return render(request,"registerUser.html")
-#         else:
-#             form=JobseekerForm(request.POST)
-#             if form.is_valid():
-#             form.save()
-#             return redirect("login")
-
-# def updateProfile(request):
-#     u_form = userUpdateForm(instance=request.user)
-
-#     context={
-#        'u_form' :  u_form
-#     }
-#     return render(request, '../templates/updateProfile.html' ,context)
+    def post(self, *args, **kwargs):
+        form = forms.JobseekerChangeForm(data=self.request.POST, files=self.request.FILES, instance=self.request.user)
+        if form.is_valid():
+            #print("UPDATE FORM VALID")
+            form.save(user=self.request.user)
+            return redirect('userProfile')
+        #return render(self.request, self.template_name, {'form':form})
 
 class registerEmp(CreateView):
     model=User

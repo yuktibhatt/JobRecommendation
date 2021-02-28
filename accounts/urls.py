@@ -10,6 +10,7 @@ urlpatterns = [
     path("logout",views.logout_view, name="logout"),
     path("userProfile",views.userProfile, name="userProfile"),
     path("empProfile",views.empProfile, name="empProfile"),
-    # path("<int:id>",views.updateProfile,name="updateProfile"),
+    path("userUpdate",views.userUpdate.as_view(), name="userUpdate")
+   
     
    ]

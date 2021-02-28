@@ -42,7 +42,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{% url 'index' %}" class="nav-link">Home</a>
+        <a href="{% url 'home' %}" class="nav-link">Home</a>
       </li>
       <!-- <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -107,7 +107,7 @@
             </a>
             <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'userUpdate'  %}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Update Profile</p>
                 </a>
@@ -261,7 +261,7 @@
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 0.0.1
     </div>
-    <strong>Copyright &copy; 2020 <a href="{% url 'index' %}">Job Board</a>.</strong> All rights
+    <strong>Copyright &copy; 2020 <a href="{% url 'home' %}">Job Board</a>.</strong> All rights
     reserved.
   </footer>
 

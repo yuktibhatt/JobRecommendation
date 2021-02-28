@@ -5,9 +5,14 @@ from .models import *
 from .forms import *
 
 def index(request):
+    # QuerySet= JoblistTable.objects.all()
+    # context= {'QuerySet':QuerySet}
+    return render(request, "index.html")
+
+def home(request):
     QuerySet= JoblistTable.objects.all()
     context= {'QuerySet':QuerySet}
-    return render(request, "index.html", context)
+    return render(request, "home.html", context)
 
 import pandas as pd
 import sqlalchemy
